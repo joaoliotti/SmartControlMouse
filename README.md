@@ -1,30 +1,66 @@
-# React + TypeScript + Vite
+# 🧠 Eye & Head Controlled Cursor
+### Este é um projeto experimental de acessibilidade que utiliza a biblioteca face-api.js para rastrear movimentos do rosto e olhos via webcam, permitindo controlar um cursor na tela apenas com o rosto. Também é possível simular cliques com base em gestos faciais, como abrir a boca e piscar.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🚀 Funcionalidades
+#### 📹 Captura facial em tempo real com webcam.
 
-Currently, two official plugins are available:
+#### 🎯 Calibração com movimento dos olhos ou cabeça.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+#### 🎮 Cursor virtual controlado por movimento do nariz.
 
-## Expanding the ESLint configuration
+#### 👁️‍🗨️ Detecção de olhos fechados e boca aberta para interações:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+#### Piscar com o olho esquerdo + boca aberta → clique esquerdo
 
-- Configure the top-level `parserOptions` property like this:
+#### Piscar com o olho direito + boca aberta → clique direito
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+#### Piscar com ambos os olhos por 2 segundos → desativa o cursor
+
+# 🧰 Tecnologias utilizadas
+#### React
+
+#### TypeScript
+
+#### face-api.js
+
+#### Web Speech API para feedback por voz
+
+# 🛠️ Como executar localmente
+## Pré-requisitos
+Node.js instalado (versão 14 ou superior)
+
+Webcam funcional
+
+# Passos pra clonar o repositório:
+
+## Instalação
+
+1. Clone ou baixe este repositório
+```bash
+https://github.com/joaoliotti/compare-json.git
+```
+2. Instale as dependências:
+```bash
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+# 🎯 Instruções de uso
+## Clique em Iniciar Calibração.
+
+#### Siga a esfera azul com os olhos ou a cabeça (dependendo do modo escolhido).
+
+#### Após a calibração (15 segundos ou fixar o olhar no ponto por 3 segundos), o cursor começará a seguir seus movimentos.
+
+#### Use os gestos para simular cliques.
+
+# ⚙️ Atalhos de gesto
+
+| Parâmetro   | Tipo       | O que faz:                                  |
+| :---------- | :--------- | :------------------------------------------ |
+| `Gesto`      | `Boca aberta + olho esquerdo fechado` | Clique Esquerdo |
+| `Gesto`      | `Boca aberta + olho direito fechado`  | Clique Direito  |
+| `Gesto`      | `Ambos olhos fechados por 2 segundos` | Pausar cursor   |
+| `Gesto`      | `Boca aberta + olho esquerdo fechado` | Clique esquerdo |
+
+# 📄 Licença
+Este projeto está licenciado sob a licença [MIT](https://choosealicense.com/licenses/mit/).
