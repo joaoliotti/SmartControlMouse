@@ -13,7 +13,7 @@ video {
   height: 20px;
   background-color: red;
   border-radius: 50%;
-  pointer-events: none; /* Para que o cursor não interfira nos eventos de clique */
+  pointer-events: none;
 }
 
 .calibration-point {
@@ -22,8 +22,8 @@ video {
   height: 20px;
   background-color: blue;
   border-radius: 50%;
-  pointer-events: none; /* Para que o ponto de calibração não interfira nos eventos de clique */
-  transition: transform 10s linear; /* Transição suave */
+  pointer-events: none;
+  transition: transform 10s linear;
 }
 
 .calibration-instructions {

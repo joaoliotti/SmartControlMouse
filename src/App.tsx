@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
 import "./App.css";
 
 const App = () => {
-  const videoRef = useRef(null);
-  const cursorRef = useRef(null);
-  const calibrationPointRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const calibrationPointRef = useRef<HTMLDivElement>(null);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [cursorActive, setCursorActive] = useState(false);
-  const [initialNosePosition, setInitialNosePosition] = useState(null);
-  const [eyesClosedStartTime, setEyesClosedStartTime] = useState(null);
-  const [calibrationStartTime, setCalibrationStartTime] = useState(null);
+  const [initialNosePosition, setInitialNosePosition] = useState<{ x: number; y: number } | null>(null);
+  const [eyesClosedStartTime, setEyesClosedStartTime] = useState<number | null>(null);
+  const [calibrationStartTime, setCalibrationStartTime] = useState<number | null>(null);
   const [isCalibrating, setIsCalibrating] = useState(false);
 
   // Função para carregar os modelos do face-api.js
@@ -28,7 +28,9 @@ const App = () => {
     // Captura de vídeo/inicia video
     const startVideo = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
-      videoRef.current.srcObject = stream;
+      if (videoRef.current) {
+        (videoRef.current as HTMLVideoElement).srcObject = stream;
+      }
     };
 
     startVideo();
@@ -53,12 +55,13 @@ const App = () => {
           const mouth = landmarks.getMouth();
           const nose = landmarks.getNose();
 
-          const width = videoRef.current.videoWidth;
-          const height = videoRef.current.videoHeight;
+          // const width = videoRef.current.videoWidth;
+          // const height = videoRef.current.videoHeight;
           const [noseX, noseY] = [nose[3].x, nose[3].y];
 
           if (isCalibrating) {
             const calibrationPoint = calibrationPointRef.current;
+            if (!calibrationPoint) return;
             const rect = calibrationPoint.getBoundingClientRect();
             const targetX = rect.left + rect.width / 2;
             const targetY = rect.top + rect.height / 2;
@@ -86,10 +89,12 @@ const App = () => {
           } else {
             if (initialNosePosition) {
               // Calcula a nova posição do cursor visual
-              const moveX = (noseX - initialNosePosition.x) * 500; // Ajusta a escala conforme necessário
+              const moveX = (noseX - initialNosePosition.x) * 500;
               const moveY = (noseY - initialNosePosition.y) * 500;
 
-              cursorRef.current.style.transform = `translate(${moveX}px, ${moveY}px)`;
+              if (cursorRef.current) {
+                cursorRef.current.style.transform = `translate(${moveX}px, ${moveY}px)`;
+              }
             }
           }
 
@@ -149,19 +154,27 @@ const App = () => {
         speakInstruction(
           "Calibração concluída. O cursor agora segue o movimento dos seus olhos."
         );
-      }, 15000); // Dura 15 segundos a calibração
+      }, 10000); // Dura 10 segundos a calibração
 
       return () => clearInterval(calibrationInterval);
     }
   }, [isCalibrating]);
 
-  const startCalibration = () => {
+  const startCalibrationEyes = () => {
     setIsCalibrating(true);
     speakInstruction(
       "Apenas com movimento dos olhos, Siga a esfera azul por todo seu percurso."
     );
     moveCalibrationPoint(); // Move a esfera imediatamente ao iniciar a calibração
   };
+
+  const startCalibrationHead = () => {
+    setIsCalibrating(true);
+    speakInstruction(
+      "Apenas apenas com movimento de cabeça, Siga a esfera azul por todo seu percurso."
+    );
+    moveCalibrationPoint(); // Move a esfera imediatamente ao iniciar a calibração
+  }
 
   const moveCalibrationPoint = () => {
     const calibrationPoint = calibrationPointRef.current;
@@ -171,8 +184,10 @@ const App = () => {
     const randomX = Math.random() * width;
     const randomY = Math.random() * height;
 
-    calibrationPoint.style.transition = "transform 0.05s linear"; // Transição suave
-    calibrationPoint.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    if (calibrationPoint) {
+      calibrationPoint.style.transition = "transform 0.05s linear";
+      calibrationPoint.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    }
   };
 
   const speakInstruction = (text: string | undefined) => {
@@ -180,16 +195,20 @@ const App = () => {
     window.speechSynthesis.speak(utterance);
   };
 
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const sleep = (ms: number | undefined) => new Promise((resolve) => setTimeout(resolve, ms));
 
   return (
     <div className="App">
       {!isCalibrating && !cursorActive && (
-        <button onClick={startCalibration}>Iniciar Calibração</button>
+        <button onClick={startCalibrationEyes}>Iniciar Calibração</button>
       )}
       {isCalibrating && (
         <div ref={calibrationPointRef} className="calibration-point"></div>
       )}
+      {isCalibrating && (
+        <div ref={startCalibrationHead} className="App"></div>
+      )}
+     
       <video ref={videoRef} autoPlay muted width="720" height="560" />
       <div ref={cursorRef} className="cursor"></div>
     </div>

@@ -1,14 +1,15 @@
 {
   "name": "face-control",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "build": "tsc -b && vite build"
   },
+  "author": "João Liotti",
+  "license": "MIT",
+  "description": "Sistema para controle mouse pelo movimento dos olhos",
   "dependencies": {
     "face-api.js": "^0.22.2",
     "react": "^18.3.1",
