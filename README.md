@@ -37,7 +37,7 @@ Webcam funcional
 
 1. Clone ou baixe este repositório
 ```bash
-https://github.com/joaoliotti/compare-json.git
+https://github.com/joaoliotti/SmartControlMouse
 ```
 2. Instale as dependências:
 ```bash
